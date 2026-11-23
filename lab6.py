@@ -23,7 +23,7 @@ def parse_course_record(course_string):
 
 gen_ed_categories = {
     "Creativity and Innovation": ["ART-133", "ART-291", "ENG-105", "GSWS-210", "MUS-330"],
-    "Communication and Expession": ["ARTH-204", "ARTH-205", "BA-450", "BI-130", "MUS-311"],
+    "Communication and Expression": ["ARTH-204", "ARTH-205", "BA-450", "BI-130", "MUS-311"],
     "Equity, Diversity, and Inclusion": ["ART-450", "ENG-214", "ES-220", "GSWS-312", "MUS-205"],
     "Inquiry and Analysis": ["GSWS-300", "ES-200", "ENG-280", "BI-101", "COMM-482"],
     "Numerical Literacy": ["CS-200", "MTH-111", "CS-346", "STAT-243z"],
@@ -86,7 +86,7 @@ def bin_student_course(transcript, gen_ed_mapping):
 
         category = get_gen_ed_category(course_code, gen_ed_mapping)
 
-        if course_status == "Completed":
+        if course_status.lower() == "completed":
 
             student_bins[category].append((course_code, course_credits))
 
@@ -94,24 +94,67 @@ def bin_student_course(transcript, gen_ed_mapping):
 
 def main():
 
+    # Create the Gen Ed categories
+    gen_ed_categories = {
+        "Creativity and Innovation": [
+            "ART-133", "ART-291", "ENG-105",
+            "GSWS-210", "MUS-330"
+        ],
+
+        "Communication and Expression": [
+            "ARTH-204", "ARTH-205", "BA-450",
+            "BI-130", "MUS-311"
+        ],
+
+        "Equity, Diversity, and Inclusion": [
+            "ART-450", "ENG-214", "ES-220",
+            "GSWS-312", "MUS-205"
+        ],
+
+        "Inquiry and Analysis": [
+            "GSWS-300", "ES-200", "ENG-280",
+            "BI-101", "COMM-482"
+        ],
+
+        "Numerical Literacy": [
+            "CS-200", "MTH-111", "CS-346",
+            "STAT-243z"
+        ],
+
+        "Purposeful Learning": [
+            "WR-121z", "WR-122z", "WR-123"
+        ]
+    }
+
+    # Create the student transcript
     transcript = (
+        "ART-133, Drawing, 3, COMPLETED",
+        "ENG-105, Creative Writing, 4, COMPLETED",
+        "ARTH-204, Art History, 3, COMPLETED",
+        "ART-450, Diversity Studies, 4, COMPLETED",
+        "ENG-280, Research Methods, 4, COMPLETED",
+        "BI-101, Biology, 4, COMPLETED",
+        "CS-200, Computer Science, 4, COMPLETED",
         "MTH-111, Pre-calculus, 4, COMPLETED",
         "WR-121z, Composition I, 3, COMPLETED",
         "WR-122z, Composition II, 3, INCOMPLETE",
-        "GSWS-210, Violence Prevention, 4, COMPLETED",
         "HIST-100, World History, 3, COMPLETED"
     )
 
-    student_bins = bin_student_course(
+    # Sort the student courses into Gen Ed bins
+    student_final_bins = bin_student_course(
         transcript, gen_ed_categories
     )
 
-    print(student_bins)
+    print("Student course bins")
+    print(student_final_bins)
 
+    # Calculate totale credits
+    credits_totals = audit_credits(student_final_bins)
+
+    print("\nTotal completed credits")
+    print(credits_totals)
 
 if __name__ == "__main__":
     main()
-                                    
-
-
     
